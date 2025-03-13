@@ -8,26 +8,6 @@ import { pubSub } from 'src/pubsub';
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
-  //   @Mutation(() => String)
-  //   async signup(
-  //     @Args('name') name: string,
-  //     @Args('email') email: string,
-  //     @Args('password') password: string,
-  //     @Args('role', { defaultValue: 'USER' }) role: 'USER' | 'ADMIN',
-  //   ): Promise<string> {
-  //     await this.authService.signup(name, email, password, role);
-  //     return 'User registered successfully';
-  //   }
-
-  @Mutation(() => String)
-  async login(
-    @Args('email') email: string,
-    @Args('password') password: string,
-  ): Promise<string> {
-    const { token } = await this.authService.login(email, password);
-    return token;
-  }
-
   @Mutation(() => User)
   async signup(
     @Args('name') name: string,
@@ -45,5 +25,14 @@ export class AuthResolver {
   })
   userCreated() {
     return pubSub.asyncIterator('USER_CREATED');
+  }
+
+  @Mutation(() => String)
+  async login(
+    @Args('email') email: string,
+    @Args('password') password: string,
+  ): Promise<string> {
+    const { token } = await this.authService.login(email, password);
+    return token;
   }
 }
