@@ -3,12 +3,17 @@ import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { UseGuards } from '@nestjs/common';
+import { Roles } from 'src/auth/decorators/role.decorator';
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Query(() => [User])
+  @UseGuards(JwtAuthGuard)
+  @Roles('ADMIN')
   async getUsers(): Promise<User[]> {
     return this.userService.getUsers();
   }
